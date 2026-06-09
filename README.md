@@ -1,6 +1,6 @@
 # Customs Control Tower
 
-Recruiter-friendly D3.js data storytelling project inspired by On growth data and customs transformation work.
+D3.js data storytelling project inspired by On growth data and customs transformation work.
 
 ## Concept
 
@@ -12,7 +12,7 @@ On is scaling fast across regions, channels and product categories. The project 
 - CSS
 - JavaScript
 - D3.js via CDN
-- Static, GitHub Pages-ready
+- Static, GitHub
 
 ## Data
 
