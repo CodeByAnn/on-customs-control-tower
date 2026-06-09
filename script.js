@@ -117,7 +117,7 @@ function renderNetwork() {
     const nodes = [
         { id: "regions", label: "Regions", sublabel: "(Trade lanes)", x: 0.13, y: 0.24, color: "#6bbfd3", labelY: 54 },
         { id: "products", label: "Products", sublabel: "(Master data)", x: 0.18, y: 0.76, color: "#7ccf98", labelY: 54 },
-        { id: "docs", label: "Shipment documents", sublabel: "(eg. Invoice & packing list)", x: 0.78, y: 0.18, color: "#e8a15a", labelY: -70 },
+        { id: "docs", label: "Shipment documents", sublabel: "(eg. Invoice & packing list)", x: width < 420 ? 0.72 : 0.78, y: 0.18, color: "#e8a15a", labelY: width < 420 ? -42 : -70 },
         { id: "rules", label: "Rules", sublabel: "(Tariff logic)", x: 0.86, y: 0.72, color: "#e98ba7", labelY: 54 },
         { id: "tower", label: "Control tower", x: 0.56, y: 0.51, color: "#1c1c1c", core: true, labelY: 74 }
     ].map(d => ({ ...d, x: d.x * width, y: d.y * height }));
@@ -320,7 +320,7 @@ function renderRegionalChart() {
     const x = d3.scaleLinear().domain([0, 500]).range([0, barWidth]);
     const y = d3.scaleBand().domain(sourceData.regions.map(d => d.region)).range([0, innerHeight]).padding(0.34);
     const growthColumnX = innerWidth - (width < 640 ? 38 : 94);
-    const labelX = width < 640 ? growthColumnX - 22 : growthColumnX + 26;
+    const labelX = width < 640 ? growthColumnX : growthColumnX + 26;
 
     g.append("g")
         .attr("class", "grid")
@@ -413,11 +413,11 @@ function renderRegionalChart() {
 
     rows.append("text")
         .attr("x", labelX)
-        .attr("y", y.bandwidth() / 2 + 4)
-        .attr("text-anchor", width < 640 ? "end" : "start")
+        .attr("y", width < 640 ? y.bandwidth() / 2 + 30 : y.bandwidth() / 2 + 4)
+        .attr("text-anchor", width < 640 ? "middle" : "start")
         .attr("dominant-baseline", "middle")
         .attr("fill", "#1c1c1c")
-        .attr("font-size", width < 640 ? 11 : 12)
+        .attr("font-size", width < 640 ? 9 : 12)
         .attr("font-weight", 900)
         .text(d => width < 640 ? `+${Math.round(d.ccGrowth)}% CC` : `+${Math.round(d.ccGrowth)}% CC growth`);
 
@@ -798,6 +798,7 @@ function renderClearanceChart() {
 
     const total = d3.sum(simulatedOps.clearance, d => d.value);
     const x = d3.scaleLinear().domain([0, total]).range([0, innerWidth]);
+    const compactLabels = innerWidth < 360;
     let cursor = 0;
 
     g.selectAll("rect")
@@ -826,12 +827,12 @@ function renderClearanceChart() {
             labelCursor += d.value;
             return x0;
         })
-        .attr("y", 73)
+        .attr("y", (d, i) => compactLabels && i === 2 ? 89 : 73)
         .attr("text-anchor", "middle")
         .attr("fill", "#6f706b")
-        .attr("font-size", 12)
+        .attr("font-size", compactLabels ? 9 : 12)
         .attr("font-weight", 950)
-        .text(d => d.label);
+        .text(d => compactLabels && d.label === "Manual review" ? "Review" : d.label);
 }
 
 function renderExceptionsChart() {

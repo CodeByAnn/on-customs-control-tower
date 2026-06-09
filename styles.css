@@ -913,6 +913,9 @@ svg {
 
     .subtitle {
         white-space: normal;
+        font-size: clamp(1.5rem, 9vw, 2.05rem);
+        line-height: 1.1;
+        word-spacing: 0.04em;
     }
 
     .lede-card,
@@ -921,6 +924,7 @@ svg {
     }
 
     .network-visual {
+        margin-top: 18px;
         min-height: 280px;
     }
 
