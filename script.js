@@ -117,7 +117,7 @@ function renderNetwork() {
     const nodes = [
         { id: "regions", label: "Regions", sublabel: "(Trade lanes)", x: 0.13, y: 0.24, color: "#6bbfd3", labelY: 54 },
         { id: "products", label: "Products", sublabel: "(Master data)", x: 0.18, y: 0.76, color: "#7ccf98", labelY: 54 },
-        { id: "docs", label: "Shipment documents", sublabel: "(eg. Invoice & packing list)", x: width < 420 ? 0.72 : 0.78, y: 0.18, color: "#e8a15a", labelY: width < 420 ? -42 : -70 },
+        { id: "docs", label: "Shipment documents", sublabel: "(eg. Invoice & packing list)", x: width < 420 ? 0.72 : 0.78, y: width < 420 ? 0.25 : 0.18, color: "#e8a15a", labelY: width < 420 ? -58 : -70 },
         { id: "rules", label: "Rules", sublabel: "(Tariff logic)", x: 0.86, y: 0.72, color: "#e98ba7", labelY: 54 },
         { id: "tower", label: "Control tower", x: 0.56, y: 0.51, color: "#1c1c1c", core: true, labelY: 74 }
     ].map(d => ({ ...d, x: d.x * width, y: d.y * height }));
@@ -711,7 +711,7 @@ function renderTariffChart() {
 
     const cash = svg.append("g")
         .attr("class", "cash-paid-signal")
-        .attr("transform", `translate(${width < 640 ? cx - 52 : cx + r * 1.18}, ${width < 640 ? cy + r * 0.96 : cy - 4})`);
+        .attr("transform", `translate(${width < 640 ? cx - 48 : cx + r * 1.18}, ${width < 640 ? cy + r * 1.26 : cy - 4})`);
 
     cash.append("circle")
         .attr("cx", 0)
@@ -728,7 +728,7 @@ function renderTariffChart() {
         .attr("x", 18)
         .attr("y", 7)
         .attr("fill", "#1c1c1c")
-        .attr("font-size", width < 640 ? 17 : 23)
+        .attr("font-size", width < 640 ? 15 : 23)
         .attr("font-weight", 950)
         .attr("letter-spacing", "-0.035em")
         .text("Cash paid");
@@ -822,15 +822,16 @@ function renderClearanceChart() {
     g.selectAll("text")
         .data(simulatedOps.clearance)
         .join("text")
-        .attr("x", d => {
+        .attr("x", (d, i) => {
             const x0 = x(labelCursor) + x(d.value) / 2;
             labelCursor += d.value;
-            return x0;
+            if (!compactLabels) return x0;
+            return x0 + (i === 1 ? -10 : i === 2 ? 8 : 0);
         })
-        .attr("y", (d, i) => compactLabels && i === 2 ? 89 : 73)
+        .attr("y", 73)
         .attr("text-anchor", "middle")
         .attr("fill", "#6f706b")
-        .attr("font-size", compactLabels ? 9 : 12)
+        .attr("font-size", compactLabels ? 8.8 : 12)
         .attr("font-weight", 950)
         .text(d => compactLabels && d.label === "Manual review" ? "Review" : d.label);
 }
